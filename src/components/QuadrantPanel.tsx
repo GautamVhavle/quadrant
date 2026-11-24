@@ -10,11 +10,26 @@ interface QuadrantPanelProps {
   onAdd: (title: string, quadrant: QuadrantId) => void;
   onToggle: (id: string) => void;
   onMove: (id: string, quadrant: QuadrantId) => void;
+  onReorder: (id: string, direction: -1 | 1) => void;
   onRename: (id: string, title: string) => void;
+  onSetDue: (id: string, due?: string) => void;
   onRemove: (id: string) => void;
 }
 
-export function QuadrantPanel({ meta, tasks, onAdd, onToggle, onMove, onRename, onRemove }: QuadrantPanelProps) {
+/** Beyond this many rows the list scrolls quietly instead of stretching the page. */
+const SCROLL_AFTER = 7;
+
+export function QuadrantPanel({
+  meta,
+  tasks,
+  onAdd,
+  onToggle,
+  onMove,
+  onReorder,
+  onRename,
+  onSetDue,
+  onRemove,
+}: QuadrantPanelProps) {
   const [draggingOver, setDraggingOver] = useState(false);
   const [adding, setAdding] = useState(false);
   const [draft, setDraft] = useState('');
@@ -23,6 +38,7 @@ export function QuadrantPanel({ meta, tasks, onAdd, onToggle, onMove, onRename, 
   const open = tasks.filter((task) => !task.done);
   const done = tasks.filter((task) => task.done);
   const sorted = [...open, ...done];
+  const scrolls = sorted.length > SCROLL_AFTER;
 
   function submit() {
     if (draft.trim()) {
@@ -73,9 +89,7 @@ export function QuadrantPanel({ meta, tasks, onAdd, onToggle, onMove, onRename, 
           >
             {open.length}
           </span>
-          {done.length > 0 && (
-            <span className="text-[11px] tabular-nums text-faint">{done.length} done</span>
-          )}
+          {done.length > 0 && <span className="text-[11px] tabular-nums text-faint">{done.length} done</span>}
         </div>
         <p className="mt-1.5 text-[13px] font-medium" style={{ color: accent }}>
           {meta.axis}
@@ -87,19 +101,35 @@ export function QuadrantPanel({ meta, tasks, onAdd, onToggle, onMove, onRename, 
       {sorted.length === 0 ? (
         <p className="mb-2 text-[13px] leading-[1.55] text-faint">{meta.empty}</p>
       ) : (
-        <ul className="mb-1 flex flex-col gap-0.5">
-          {sorted.map((task) => (
-            <TaskRow
-              key={task.id}
-              task={task}
-              accent={accent}
-              onToggle={onToggle}
-              onMove={onMove}
-              onRename={onRename}
-              onRemove={onRemove}
-            />
-          ))}
-        </ul>
+        <div
+          className={cn(
+            'mb-1',
+            scrolls &&
+              'max-h-[19rem] overflow-y-auto overscroll-contain pr-1 [scrollbar-width:thin] [scrollbar-color:var(--line-strong)_transparent]',
+          )}
+        >
+          <ul className="flex flex-col gap-0.5">
+            {sorted.map((task) => {
+              const siblings = sorted.filter((item) => item.done === task.done);
+              const position = siblings.findIndex((item) => item.id === task.id);
+              return (
+                <TaskRow
+                  key={task.id}
+                  task={task}
+                  accent={accent}
+                  canMoveUp={position > 0}
+                  canMoveDown={position >= 0 && position < siblings.length - 1}
+                  onToggle={onToggle}
+                  onMove={onMove}
+                  onReorder={onReorder}
+                  onRename={onRename}
+                  onSetDue={onSetDue}
+                  onRemove={onRemove}
+                />
+              );
+            })}
+          </ul>
+        </div>
       )}
 
       <div className="mt-auto pt-2">

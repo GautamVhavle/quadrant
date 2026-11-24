@@ -7,6 +7,8 @@ export interface Task {
   done: boolean;
   createdAt: number;
   completedAt?: number;
+  /** ISO date (YYYY-MM-DD), optional. */
+  due?: string;
 }
 
 export interface QuadrantMeta {
@@ -72,3 +74,6 @@ export const QUADRANT_BY_ID = QUADRANTS.reduce(
 export function isQuadrantId(value: string): value is QuadrantId {
   return value === 'do' || value === 'schedule' || value === 'delegate' || value === 'delete';
 }
+
+/** Priority order used by the capture chips, the phone stack and focus mode. */
+export const PRIORITY_ORDER: QuadrantId[] = ['do', 'schedule', 'delegate', 'delete'];

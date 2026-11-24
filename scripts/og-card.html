@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Quadrant social card</title>
+    <style>
+      @font-face {
+        font-family: 'Bricolage Grotesque';
+        font-weight: 400 800;
+        src: url('/fonts/bricolage-grotesque-normal-400_800.woff2') format('woff2');
+      }
+      @font-face {
+        font-family: 'Instrument Sans';
+        font-weight: 400 600;
+        src: url('/fonts/instrument-sans-normal-400_600.woff2') format('woff2');
+      }
+      * { box-sizing: border-box; margin: 0; }
+      body {
+        width: 1200px;
+        height: 630px;
+        background: #f4f4f1;
+        color: #141a17;
+        font-family: 'Instrument Sans', sans-serif;
+        padding: 60px 72px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: relative;
+        overflow: hidden;
+      }
+      .top { display: flex; align-items: center; gap: 13px; }
+      .mark { display: grid; grid-template-columns: repeat(2, 11px); gap: 3px; }
+      .mark i { width: 11px; height: 11px; border-radius: 2px; display: block; }
+      .brand {
+        font-family: 'Bricolage Grotesque', sans-serif;
+        font-size: 29px;
+        font-weight: 600;
+        letter-spacing: -0.03em;
+      }
+      h1 {
+        font-family: 'Bricolage Grotesque', sans-serif;
+        font-size: 74px;
+        line-height: 1;
+        letter-spacing: -0.038em;
+        font-weight: 600;
+        max-width: 14ch;
+        margin-top: 30px;
+      }
+      p { margin-top: 20px; font-size: 22px; line-height: 1.42; color: #4d5751; max-width: 24ch; }
+      .board {
+        position: absolute;
+        right: 54px;
+        top: 118px;
+        width: 470px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        border: 1px solid #bcc1b8;
+        border-radius: 16px;
+        overflow: hidden;
+        background: #fff;
+        box-shadow: 0 30px 60px -40px rgba(20, 26, 23, 0.55);
+        transform: rotate(-3deg);
+      }
+      .cell { padding: 24px 22px 28px; border-right: 1px solid #bcc1b8; border-bottom: 1px solid #bcc1b8; }
+      .cell:nth-child(2n) { border-right: 0; }
+      .cell:nth-child(n + 3) { border-bottom: 0; }
+      .cell.do { background: #f8ece8; }
+      .cell.schedule { background: #e8efef; }
+      .cell.delegate { background: #f7f1e3; }
+      .cell.drop { background: #eaedee; }
+      .label { display: flex; align-items: center; gap: 8px; font-size: 20px; font-weight: 600; letter-spacing: -0.01em; }
+      .dot { width: 10px; height: 10px; border-radius: 50%; }
+      .row { margin-top: 14px; display: flex; gap: 9px; align-items: flex-start; font-size: 15px; line-height: 1.32; color: #3c4640; }
+      .box { width: 15px; height: 15px; border: 1px solid #bcc1b8; border-radius: 4px; flex: none; margin-top: 1px; }
+      .box.on { background: #1a6670; border-color: #1a6670; }
+      .foot { display: flex; align-items: center; gap: 10px; font-size: 17px; color: #67716a; }
+    </style>
+  </head>
+  <body>
+    <div class="top">
+      <span class="mark">
+        <i style="background: #1a6670"></i><i style="background: #bd4429"></i>
+        <i style="background: #5f6a72"></i><i style="background: #8d6208"></i>
+      </span>
+      <span class="brand">Quadrant</span>
+    </div>
+
+    <div>
+      <h1>Decide what actually matters</h1>
+      <p>Sort tasks by urgency and importance.</p>
+    </div>
+
+    <div class="board">
+      <div class="cell schedule">
+        <div class="label"><span class="dot" style="background: #1a6670"></span>Schedule</div>
+        <div class="row"><span class="box on"></span>Draft the hiring plan</div>
+      </div>
+      <div class="cell do">
+        <div class="label"><span class="dot" style="background: #bd4429"></span>Do now</div>
+        <div class="row"><span class="box"></span>Send the proposal</div>
+      </div>
+      <div class="cell drop">
+        <div class="label"><span class="dot" style="background: #5f6a72"></span>Drop</div>
+        <div class="row"><span class="box"></span>Reorganise the drive</div>
+      </div>
+      <div class="cell delegate">
+        <div class="label"><span class="dot" style="background: #8d6208"></span>Delegate</div>
+        <div class="row"><span class="box"></span>Reply to the organiser</div>
+      </div>
+    </div>
+
+    <div class="foot">No account. Nothing leaves your browser.</div>
+  </body>
+</html>

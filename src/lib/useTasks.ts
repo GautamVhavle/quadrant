@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { loadTasks, saveTasks } from './storage';
 import { uid } from './utils';
+import * as logic from './taskLogic';
 import type { QuadrantId, Task } from './types';
 
 export interface TaskStore {
@@ -8,11 +9,14 @@ export interface TaskStore {
   add: (title: string, quadrant: QuadrantId) => void;
   toggle: (id: string) => void;
   move: (id: string, quadrant: QuadrantId) => void;
+  reorder: (id: string, direction: -1 | 1) => void;
   rename: (id: string, title: string) => void;
+  setDue: (id: string, due?: string) => void;
   remove: (id: string) => void;
-  restore: (task: Task) => void;
-  clearDone: () => void;
-  counts: Record<QuadrantId, { open: number; done: number }>;
+  restore: (tasks: Task[]) => void;
+  clearDone: () => Task[];
+  replaceAll: (tasks: Task[]) => void;
+  counts: logic.Counts;
   total: { open: number; done: number };
 }
 
@@ -24,77 +28,67 @@ export function useTasks(): TaskStore {
   }, [tasks]);
 
   const add = useCallback((title: string, quadrant: QuadrantId) => {
-    const trimmed = title.trim();
-    if (!trimmed) return;
-    setTasks((prev) => [
-      ...prev,
-      {
-        id: uid(),
-        title: trimmed.slice(0, 240),
-        quadrant,
-        done: false,
-        createdAt: Date.now(),
-      },
-    ]);
+    setTasks((prev) => logic.addTask(prev, title, quadrant, uid()));
   }, []);
 
   const toggle = useCallback((id: string) => {
-    setTasks((prev) =>
-      prev.map((task) =>
-        task.id === id
-          ? { ...task, done: !task.done, completedAt: task.done ? undefined : Date.now() }
-          : task,
-      ),
-    );
+    setTasks((prev) => logic.toggleTask(prev, id));
   }, []);
 
   const move = useCallback((id: string, quadrant: QuadrantId) => {
-    setTasks((prev) => prev.map((task) => (task.id === id ? { ...task, quadrant } : task)));
+    setTasks((prev) => logic.moveTask(prev, id, quadrant));
+  }, []);
+
+  const reorder = useCallback((id: string, direction: -1 | 1) => {
+    setTasks((prev) => logic.reorderTask(prev, id, direction));
   }, []);
 
   const rename = useCallback((id: string, title: string) => {
-    const trimmed = title.trim();
-    if (!trimmed) return;
-    setTasks((prev) =>
-      prev.map((task) => (task.id === id ? { ...task, title: trimmed.slice(0, 240) } : task)),
-    );
+    setTasks((prev) => logic.renameTask(prev, id, title));
+  }, []);
+
+  const setDue = useCallback((id: string, due?: string) => {
+    setTasks((prev) => logic.setDueDate(prev, id, due));
   }, []);
 
   const remove = useCallback((id: string) => {
-    setTasks((prev) => prev.filter((task) => task.id !== id));
+    setTasks((prev) => logic.removeTask(prev, id));
   }, []);
 
-  const restore = useCallback((task: Task) => {
-    setTasks((prev) => (prev.some((existing) => existing.id === task.id) ? prev : [...prev, task]));
+  const restore = useCallback((restored: Task[]) => {
+    setTasks((prev) => {
+      const known = new Set(prev.map((task) => task.id));
+      const additions = restored.filter((task) => !known.has(task.id));
+      return additions.length ? [...additions, ...prev] : prev;
+    });
   }, []);
 
-  const clearDone = useCallback(() => {
-    setTasks((prev) => prev.filter((task) => !task.done));
-  }, []);
-
-  const counts = useMemo(() => {
-    const base: Record<QuadrantId, { open: number; done: number }> = {
-      do: { open: 0, done: 0 },
-      schedule: { open: 0, done: 0 },
-      delegate: { open: 0, done: 0 },
-      delete: { open: 0, done: 0 },
-    };
-    for (const task of tasks) {
-      if (task.done) base[task.quadrant].done += 1;
-      else base[task.quadrant].open += 1;
-    }
-    return base;
+  const clearDone = useCallback((): Task[] => {
+    const removed = tasks.filter((task) => task.done);
+    if (removed.length) setTasks((prev) => prev.filter((task) => !task.done));
+    return removed;
   }, [tasks]);
 
-  const total = useMemo(() => {
-    let open = 0;
-    let done = 0;
-    for (const task of tasks) {
-      if (task.done) done += 1;
-      else open += 1;
-    }
-    return { open, done };
-  }, [tasks]);
+  const replaceAll = useCallback((next: Task[]) => {
+    setTasks(next);
+  }, []);
 
-  return { tasks, add, toggle, move, rename, remove, restore, clearDone, counts, total };
+  const counts = useMemo(() => logic.countTasks(tasks), [tasks]);
+  const total = useMemo(() => logic.totals(tasks), [tasks]);
+
+  return {
+    tasks,
+    add,
+    toggle,
+    move,
+    reorder,
+    rename,
+    setDue,
+    remove,
+    restore,
+    clearDone,
+    replaceAll,
+    counts,
+    total,
+  };
 }

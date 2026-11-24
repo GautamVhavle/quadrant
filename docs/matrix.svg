@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 560" width="880" height="560" role="img" aria-label="The four quadrants: do now, schedule, delegate and drop, arranged by urgency and importance">
+  <title>How the four quadrants are arranged</title>
+  <rect width="880" height="560" rx="14" fill="#f4f4f1" />
+
+  <!-- axes -->
+  <path d="M112 476 L112 76 M104 86 L112 76 L120 86" stroke="#8b948d" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="30" y="300" fill="#4d5751" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="600" letter-spacing="2" transform="rotate(-90 30 300)" text-anchor="middle">IMPORTANCE</text>
+  <path d="M128 520 L716 520 M704 512 L716 520 L704 528" stroke="#8b948d" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="560" y="548" fill="#4d5751" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="600" letter-spacing="2" text-anchor="middle">URGENCY</text>
+
+  <!-- board -->
+  <rect x="122" y="92" width="716" height="384" rx="12" fill="#ffffff" stroke="#bcc1b8"/>
+
+  <!-- schedule -->
+  <rect x="122.5" y="92.5" width="357" height="191" fill="#e8efef"/>
+  <circle cx="156" cy="130" r="5" fill="#1a6670"/>
+  <text x="172" y="136" fill="#141a17" font-family="ui-sans-serif, system-ui, sans-serif" font-size="19" font-weight="600">Schedule</text>
+  <text x="156" y="164" fill="#1a6670" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="600">Important, not urgent</text>
+  <text x="156" y="192" fill="#4d5751" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13">Planning, deep work, relationships.</text>
+  <text x="156" y="214" fill="#4d5751" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13">No deadline, so it needs a calendar slot.</text>
+
+  <!-- do now -->
+  <rect x="479.5" y="92.5" width="358" height="191" fill="#f8ece8"/>
+  <circle cx="513" cy="130" r="5" fill="#bd4429"/>
+  <text x="529" y="136" fill="#141a17" font-family="ui-sans-serif, system-ui, sans-serif" font-size="19" font-weight="600">Do now</text>
+  <text x="513" y="164" fill="#bd4429" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="600">Urgent and important</text>
+  <text x="513" y="192" fill="#4d5751" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13">Real deadlines and genuine crises.</text>
+  <text x="513" y="214" fill="#4d5751" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13">Handle it, then leave.</text>
+
+  <!-- drop -->
+  <rect x="122.5" y="283.5" width="357" height="192" fill="#eaedee"/>
+  <circle cx="156" cy="321" r="5" fill="#5f6a72"/>
+  <text x="172" y="327" fill="#141a17" font-family="ui-sans-serif, system-ui, sans-serif" font-size="19" font-weight="600">Drop</text>
+  <text x="156" y="355" fill="#5f6a72" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="600">Not urgent, not important</text>
+  <text x="156" y="383" fill="#4d5751" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13">Busywork and filler.</text>
+  <text x="156" y="405" fill="#4d5751" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13">Removing it is the productive move.</text>
+
+  <!-- delegate -->
+  <rect x="479.5" y="283.5" width="358" height="192" fill="#f7f1e3"/>
+  <circle cx="513" cy="321" r="5" fill="#8d6208"/>
+  <text x="529" y="327" fill="#141a17" font-family="ui-sans-serif, system-ui, sans-serif" font-size="19" font-weight="600">Delegate</text>
+  <text x="513" y="355" fill="#8d6208" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="600">Urgent, not important</text>
+  <text x="513" y="383" fill="#4d5751" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13">Other people&#8217;s priorities wearing your name.</text>
+  <text x="513" y="405" fill="#4d5751" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13">Hand off, trade, or timebox.</text>
+
+  <!-- grid lines on top -->
+  <path d="M479 92 L479 476 M122 283 L838 283" stroke="#bcc1b8" stroke-width="1"/>
+</svg>
