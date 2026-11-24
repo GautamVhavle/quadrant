@@ -8,7 +8,7 @@
 
 Sort any task by urgency and importance, watch the board tell you what deserves today, and read why the method works while you use it.
 
-[![Live demo](https://img.shields.io/badge/live-demo-1a6670?style=flat)](https://quadrant-tasks.vercel.app)
+[![Live demo](https://img.shields.io/badge/live-quadrant--tasks--nine.vercel.app-1a6670?style=flat)](https://quadrant-tasks-nine.vercel.app)
 [![React](https://img.shields.io/badge/React-18-149ECA?logo=react&logoColor=white)](https://react.dev)
 [![Vite](https://img.shields.io/badge/Vite-5-646CFF?logo=vite&logoColor=white)](https://vitejs.dev)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
@@ -25,6 +25,8 @@ Sort any task by urgency and importance, watch the board tell you what deserves 
 ## What this is
 
 Most to-do apps give you one instruction: more. Quadrant asks two questions instead. Is this urgent? Is this important? Your answer decides where the task lives, and the position on the board decides how you treat it.
+
+**Live app: [quadrant-tasks-nine.vercel.app](https://quadrant-tasks-nine.vercel.app)**
 
 Everything runs in the browser. There is no account, no server, no database and no analytics.
 
@@ -97,7 +99,7 @@ npm run typecheck  # TypeScript check
 
 ## Deploy
 
-The app is a static site, so any static host works. On Vercel:
+The app is a static site, so any static host works. It is deployed on Vercel at [quadrant-tasks-nine.vercel.app](https://quadrant-tasks-nine.vercel.app).
 
 ```bash
 npx vercel        # preview deployment
