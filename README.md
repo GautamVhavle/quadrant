@@ -113,6 +113,7 @@ Open `http://localhost:3000`. No environment variables are needed for the app it
 | `npm run test:e2e` | Browser tests, building and starting the app |
 | `npm run verify` | Typecheck, unit tests, build |
 | `node scripts/capture-screenshots.mjs` | Regenerate the screenshots against a running build |
+| `node scripts/verify-live.mjs <url>` | Drive the deployed app end to end and report any client error |
 
 | Variable | Purpose |
 | --- | --- |
