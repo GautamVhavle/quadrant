@@ -22,11 +22,20 @@ export interface TaskStore {
 }
 
 export function useTasks(): TaskStore {
-  const [tasks, setTasks] = useState<Task[]>(() => loadTasks());
+  // Start empty so the server and the first client render agree. The stored
+  // board is loaded after mount, which is the only place localStorage exists.
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
+    setTasks(loadTasks());
+    setLoaded(true);
+  }, []);
+
+  useEffect(() => {
+    if (!loaded) return;
     saveTasks(tasks);
-  }, [tasks]);
+  }, [loaded, tasks]);
 
   const add = useCallback((title: string, quadrant: QuadrantId, details?: TaskDetails) => {
     setTasks((prev) => logic.addTask(prev, title, quadrant, uid(), Date.now(), details));
