@@ -59,6 +59,8 @@ Urgent means "something breaks if it slips" or "someone is waiting with a date".
 | --- | --- |
 | ![Triage question](docs/screenshots/triage-question.png) | ![Triage verdict](docs/screenshots/triage-verdict.png) |
 
+The verdict above uses a sample model reply, captured with the network mocked. Against the live deployment with no key set, the same sheet shows the rule based estimate and says so.
+
 ### On a phone
 
 | Board | Sheet |
