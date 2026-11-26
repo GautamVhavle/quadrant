@@ -214,7 +214,13 @@ export function TriageSheet({ task, onClose, onAccept }: TriageSheetProps) {
           <div className="min-w-0">
             <p className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-faint">
               <SparkIcon className="h-3.5 w-3.5" />
-              {phase === 'asking' ? `Question ${step + 1} of ${QUESTIONS.length}` : 'Four questions answered'}
+              {phase === 'asking'
+                ? `Question ${step + 1} of ${QUESTIONS.length}`
+                : phase === 'thinking'
+                  ? 'Reading your answers'
+                  : phase === 'verdict'
+                    ? 'Four questions answered'
+                    : 'The sorter is unavailable'}
             </p>
             <p id="triage-title" className="mt-1.5 truncate text-[13px] text-soft">
               {task}
@@ -354,9 +360,38 @@ export function TriageSheet({ task, onClose, onAccept }: TriageSheetProps) {
                   <AlertIcon className="mt-0.5 h-4 w-4 shrink-0 text-q1" />
                   <p className="text-[14px] leading-[1.5] text-ink">{problem.message}</p>
                 </div>
-                <p className="mt-3 text-[12.5px] text-faint">
-                  The board never needs the sorter to work. Pick a quadrant and move on.
-                </p>
+
+                <p className="mt-4 text-[13px] text-soft">Pick where it belongs and keep moving.</p>
+                <div className="mt-2 flex flex-wrap gap-1.5">
+                  {PRIORITY_ORDER.map((id) => {
+                    const meta = QUADRANT_BY_ID[id];
+                    const active = choice === id;
+                    return (
+                      <button
+                        key={id}
+                        type="button"
+                        onClick={() => setChoice(id)}
+                        aria-pressed={active}
+                        className={cn(
+                          'flex items-center gap-1.5 rounded-pill border px-2.5 py-1.5 text-[12.5px] transition',
+                          active
+                            ? 'border-transparent text-white'
+                            : 'border-[color:var(--line)] bg-white/55 text-soft hover:text-ink dark:bg-white/10',
+                        )}
+                        style={active ? { backgroundColor: `var(--${meta.colorVar})` } : undefined}
+                      >
+                        {!active && (
+                          <span
+                            className="h-1.5 w-1.5 rounded-full"
+                            style={{ backgroundColor: `var(--${meta.colorVar})` }}
+                            aria-hidden="true"
+                          />
+                        )}
+                        {meta.name}
+                      </button>
+                    );
+                  })}
+                </div>
               </motion.div>
             )}
 
@@ -462,7 +497,7 @@ export function TriageSheet({ task, onClose, onAccept }: TriageSheetProps) {
         </div>
 
         <div className="safe-bottom border-t border-[color:var(--line)] bg-white/35 px-5 py-3 dark:bg-white/5 sm:px-6">
-          {phase === 'verdict' && chosenMeta ? (
+          {(phase === 'verdict' || phase === 'problem') && chosenMeta ? (
             <div className="flex items-center gap-2.5">
               <button
                 type="button"
@@ -486,7 +521,7 @@ export function TriageSheet({ task, onClose, onAccept }: TriageSheetProps) {
                 ? 'Answer with the keys Y and N, or tap. Escape closes.'
                 : phase === 'thinking'
                   ? 'Usually a second or two.'
-                  : 'Pick a quadrant above, or close and place it yourself.'}
+                  : 'Choose an area above to place it yourself.'}
             </p>
           )}
         </div>

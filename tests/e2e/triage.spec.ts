@@ -94,12 +94,13 @@ test('explains the rate limit and still lets the user place the task', async ({ 
   for (let index = 0; index < 4; index += 1) await page.keyboard.press('n');
 
   await expect(page.getByText(/Try again in 45 seconds/)).toBeVisible({ timeout: 15_000 });
-  await page.getByRole('button', { name: 'Close', exact: true }).click();
-  await expect(page.getByRole('dialog')).toBeHidden();
+  await expect(page.getByText('The sorter is unavailable')).toBeVisible();
 
-  await page.getByLabel('New task').fill('Place me myself');
-  await page.getByRole('button', { name: /Drop/ }).last().click();
-  await expect(page.getByRole('region', { name: 'Drop' }).getByText('Place me myself')).toBeVisible();
+  // The escape hatch lives in the sheet, so nothing is blocked by the message.
+  await page.getByRole('dialog').getByRole('button', { name: 'Schedule' }).click();
+  await page.getByRole('button', { name: 'Add to Schedule' }).click();
+  await expect(page.getByRole('dialog')).toBeHidden();
+  await expect(page.getByRole('region', { name: 'Schedule' }).getByText(/proposal to Meera/)).toBeVisible();
 });
 
 test('says so when the model did not answer', async ({ page }) => {
