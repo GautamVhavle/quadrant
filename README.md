@@ -14,7 +14,7 @@ Add a task and Quadrant asks four yes or no questions about it. A model reads yo
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 [![Framer Motion](https://img.shields.io/badge/Motion-14-E64CE0?logo=framer&logoColor=white)](https://motion.dev)
-[![Unit tests](https://img.shields.io/badge/unit%20tests-69%20passing-1a6670)](#testing)
+[![Unit tests](https://img.shields.io/badge/unit%20tests-104%20passing-1a6670)](#testing)
 [![Browser tests](https://img.shields.io/badge/browser%20tests-19%20passing-1a6670)](#testing)
 [![License](https://img.shields.io/badge/license-MIT-141a17)](LICENSE)
 
@@ -181,6 +181,7 @@ lib/
 ├── utils.ts             class merging and ids
 └── server/
     ├── openrouter.ts    chat completion with a strict JSON contract
+    ├── triageHandler.ts the route contract as a pure, injected function
     └── rateLimit.ts     sliding window limiter, injectable clock
 ```
 
@@ -190,16 +191,22 @@ lib/
 - **Frosted glass from one token file.** Every surface is translucent with a backdrop blur, a hairline and one shadow step. Light and dark come from the same tokens, resolved as explicit choice, then system preference, then light.
 - **Motion with a job.** A spring brings the sheet in, questions slide in the direction you answered, the verdict fades up, and the row animates into the board. All of it collapses under `prefers-reduced-motion`.
 - **No LangChain.** Four fixed questions with a strict JSON contract are smaller and easier to reason about than a framework, and the fallback path stays obvious.
-- **Task logic is pure functions,** which is why 69 unit tests run in under a second with no DOM.
+- **Task logic is pure functions,** which is why 104 unit tests run in under a second with no DOM.
 
 ## Testing
 
 ```bash
-npm test          # 69 unit tests
+npm test          # 104 unit tests
 npm run test:e2e  # 19 browser tests
 ```
 
-Unit tests cover the mapping table for all sixteen answer combinations and the boundaries around it, confidence behaviour, request and model output validation, the rate limiter windows and refill, title clamping, and the whole task algebra: add, toggle, move, reorder, counts, overdue, and import validation.
+**The model is mocked everywhere.** No test needs a key or the network:
+
+- `openrouter.test.ts` mocks `fetch` and pins the request shape, the key going into the header and never into the body, fenced JSON, clamped confidence, and every failure mode: 5xx, 401, network error, timeout, unknown quadrant, missing reason.
+- `triageHandler.test.ts` mocks the model and the clock to pin the route contract: validation, the 429 with `Retry-After`, per client counting, offline mode, the degraded fallback, and uncacheable responses.
+- `triageIntegration.test.ts` runs the real handler against the real OpenRouter client with only the network mocked, which is as close to the deployed path as you can get without a key.
+
+The rest covers the mapping table for all sixteen answer combinations and its boundaries, confidence behaviour, request validation, the limiter windows and refill, title clamping, and the whole task algebra: add, toggle, move, reorder, counts, overdue, and import validation.
 
 Browser tests cover both paths end to end: the four question flow by keyboard and by button, going back, accepting, overruling the verdict before accepting, the rate limit message and the manual escape hatch, the degraded model notice, Escape and backdrop close, plus direct placement, reordering, undo, due dates, focus mode, theme persistence, export, a rejected import, and a 360px check for horizontal overflow.
 
