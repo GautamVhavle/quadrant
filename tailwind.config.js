@@ -1,17 +1,17 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./index.html', './src/**/*.{ts,tsx}'],
+  content: ['./app/**/*.{ts,tsx}', './components/**/*.{ts,tsx}', './lib/**/*.{ts,tsx}'],
   theme: {
     extend: {
       colors: {
         canvas: 'var(--canvas)',
-        surface: 'var(--surface)',
-        raised: 'var(--raised)',
+        glass: 'var(--glass)',
+        'glass-strong': 'var(--glass-strong)',
         ink: 'var(--ink)',
         soft: 'var(--soft)',
         faint: 'var(--faint)',
         line: 'var(--line)',
-        strong: 'var(--line-strong)',
+        edge: 'var(--edge)',
         q1: 'var(--q1)',
         q2: 'var(--q2)',
         q3: 'var(--q3)',
@@ -27,16 +27,25 @@ export default {
         sans: ['"Instrument Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       borderRadius: {
-        field: '6px',
-        control: '9px',
+        glass: '22px',
+        sheet: '28px',
+        control: '14px',
         pill: '999px',
       },
       maxWidth: {
-        page: '1240px',
+        page: '1200px',
         prose: '68ch',
       },
       transitionTimingFunction: {
         calm: 'cubic-bezier(0.22, 0.61, 0.36, 1)',
+        spring: 'cubic-bezier(0.32, 1.28, 0.54, 1)',
+      },
+      boxShadow: {
+        glass: 'var(--shadow-glass)',
+        lift: 'var(--shadow-lift)',
+      },
+      blur: {
+        glass: '22px',
       },
     },
   },

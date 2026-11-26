@@ -14,8 +14,8 @@ import {
   setDueDate,
   toggleTask,
   totals,
-} from '../src/lib/taskLogic';
-import type { Task } from '../src/lib/types';
+} from '../lib/taskLogic';
+import type { Task } from '../lib/types';
 
 const NOW = new Date('2026-03-10T09:00:00Z').getTime();
 

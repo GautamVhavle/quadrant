@@ -3,7 +3,7 @@ import type { SVGProps } from 'react';
 const base = {
   fill: 'none',
   stroke: 'currentColor',
-  strokeWidth: 1.6,
+  strokeWidth: 1.7,
   strokeLinecap: 'round' as const,
   strokeLinejoin: 'round' as const,
   viewBox: '0 0 24 24',
@@ -37,12 +37,12 @@ export function CloseIcon(props: SVGProps<SVGSVGElement>) {
 export function GripIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg {...base} {...props} strokeWidth={2}>
-      <circle cx="9" cy="6" r="0.6" />
-      <circle cx="15" cy="6" r="0.6" />
-      <circle cx="9" cy="12" r="0.6" />
-      <circle cx="15" cy="12" r="0.6" />
-      <circle cx="9" cy="18" r="0.6" />
-      <circle cx="15" cy="18" r="0.6" />
+      <circle cx="9" cy="6" r="0.7" />
+      <circle cx="15" cy="6" r="0.7" />
+      <circle cx="9" cy="12" r="0.7" />
+      <circle cx="15" cy="12" r="0.7" />
+      <circle cx="9" cy="18" r="0.7" />
+      <circle cx="15" cy="18" r="0.7" />
     </svg>
   );
 }
@@ -59,6 +59,14 @@ export function ArrowUpIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg {...base} {...props}>
       <path d="M12 20V5M6 11l6-6 6 6" />
+    </svg>
+  );
+}
+
+export function ChevronLeftIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M14 6l-6 6 6 6" />
     </svg>
   );
 }
@@ -85,6 +93,42 @@ export function MonitorIcon(props: SVGProps<SVGSVGElement>) {
     <svg {...base} {...props}>
       <rect x="3" y="4" width="18" height="12" rx="2" />
       <path d="M9 20h6M12 16v4" />
+    </svg>
+  );
+}
+
+/** Marks anything that came from the model rather than from the manual path. */
+export function SparkIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M12 3.5 13.9 9 19.5 11 13.9 13 12 18.5 10.1 13 4.5 11 10.1 9 12 3.5Z" />
+      <path d="M18.5 4.5v3M17 6h3" />
+    </svg>
+  );
+}
+
+export function HeartIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props} fill="currentColor" stroke="none">
+      <path d="M12 20s-7-4.35-7-9a4 4 0 0 1 7-2.65A4 4 0 0 1 19 11c0 4.65-7 9-7 9Z" />
+    </svg>
+  );
+}
+
+export function AlertIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M12 4.5 21 20H3l9-15.5Z" />
+      <path d="M12 10v4M12 17.2v.1" />
+    </svg>
+  );
+}
+
+export function CalendarIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props} strokeWidth={1.6}>
+      <rect x="3.5" y="5" width="17" height="15" rx="2.5" />
+      <path d="M8 3v4M16 3v4M3.5 10h17" />
     </svg>
   );
 }
