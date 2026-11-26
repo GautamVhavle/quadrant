@@ -13,3 +13,4 @@ skills-lock.json
 test-results
 playwright-report
 next-env.d.ts
+tsconfig.tsbuildinfo

@@ -1,8 +1,20 @@
 import { isQuadrantId, type QuadrantId, type Task } from './types';
 
 export const MAX_TITLE = 240;
+export const MAX_NOTES = 400;
 
 export type Counts = Record<QuadrantId, { open: number; done: number }>;
+
+export interface TaskDetails {
+  notes?: string;
+  due?: string;
+}
+
+function cleanNotes(notes?: string): string | undefined {
+  if (typeof notes !== 'string') return undefined;
+  const trimmed = notes.trim().replace(/\s+/g, ' ');
+  return trimmed ? trimmed.slice(0, MAX_NOTES) : undefined;
+}
 
 function emptyCounts(): Counts {
   return {
@@ -18,14 +30,29 @@ export function makeTask(
   quadrant: QuadrantId,
   id: string,
   now = Date.now(),
-  due?: string,
+  details: TaskDetails = {},
 ): Task {
-  return { id, title: title.trim().slice(0, MAX_TITLE), quadrant, done: false, createdAt: now, due };
+  return {
+    id,
+    title: title.trim().slice(0, MAX_TITLE),
+    quadrant,
+    done: false,
+    createdAt: now,
+    due: details.due || undefined,
+    notes: cleanNotes(details.notes),
+  };
 }
 
-export function addTask(tasks: Task[], title: string, quadrant: QuadrantId, id: string, now = Date.now()): Task[] {
+export function addTask(
+  tasks: Task[],
+  title: string,
+  quadrant: QuadrantId,
+  id: string,
+  now = Date.now(),
+  details: TaskDetails = {},
+): Task[] {
   if (!title.trim()) return tasks;
-  return [...tasks, makeTask(title, quadrant, id, now)];
+  return [...tasks, makeTask(title, quadrant, id, now, details)];
 }
 
 export function toggleTask(tasks: Task[], id: string, now = Date.now()): Task[] {
@@ -120,6 +147,7 @@ function isValidTask(value: unknown): value is Task {
     typeof candidate.done === 'boolean' &&
     typeof candidate.createdAt === 'number' &&
     (candidate.due === undefined || typeof candidate.due === 'string') &&
+    (candidate.notes === undefined || typeof candidate.notes === 'string') &&
     (candidate.completedAt === undefined || typeof candidate.completedAt === 'number')
   );
 }

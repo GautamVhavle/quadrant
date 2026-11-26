@@ -115,6 +115,14 @@ export function HeartIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+export function GitHubIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M9 20.5c-4 1.15-4-2.1-5.6-2.5M15 21v-3.4c0-1 .1-1.4-.5-2 2.3-.25 4.5-1.15 4.5-5.1a4 4 0 0 0-1.1-2.8 3.7 3.7 0 0 0-.1-2.8s-.9-.3-3 1.1a10.4 10.4 0 0 0-5.4 0C7.4 4.6 6.5 4.9 6.5 4.9a3.7 3.7 0 0 0-.1 2.8A4 4 0 0 0 5.3 10.5c0 3.95 2.2 4.85 4.5 5.1-.6.6-.6 1.2-.5 2V21" />
+    </svg>
+  );
+}
+
 export function AlertIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg {...base} {...props}>

@@ -3,10 +3,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { Header } from './Header';
-import { Composer } from './Composer';
+import { AddTaskDialog } from './AddTaskDialog';
 import { Matrix } from './Matrix';
-import { TriageSheet } from './TriageSheet';
 import { Toast } from './Toast';
+import { PlusIcon } from './Icons';
 import { useTasks } from '@/lib/useTasks';
 import {
   applyTheme,
@@ -19,6 +19,7 @@ import {
   type ThemeChoice,
 } from '@/lib/storage';
 import { completedRecently } from '@/lib/taskLogic';
+import type { TaskDetails } from '@/lib/taskLogic';
 import type { QuadrantId } from '@/lib/types';
 
 interface ToastState {
@@ -32,7 +33,7 @@ export default function Board() {
   const [theme, setTheme] = useState<ThemeChoice>('system');
   const [focus, setFocus] = useState(false);
   const [toast, setToast] = useState<ToastState | null>(null);
-  const [triageTask, setTriageTask] = useState<string | null>(null);
+  const [adding, setAdding] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const reduce = useReducedMotion();
   const hydrated = useRef(false);
@@ -53,6 +54,21 @@ export default function Board() {
     if (!hydrated.current) return;
     saveFocus(focus);
   }, [focus]);
+
+  // One shortcut for the main action, ignored while typing or while the dialog is up.
+  useEffect(() => {
+    function onKey(event: KeyboardEvent) {
+      if (adding || event.metaKey || event.ctrlKey || event.altKey) return;
+      const target = event.target as HTMLElement | null;
+      if (target && /^(input|textarea|select)$/i.test(target.tagName)) return;
+      if (event.key === 'n' || event.key === 'N') {
+        event.preventDefault();
+        setAdding(true);
+      }
+    }
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [adding]);
 
   const handleRemove = useCallback(
     (id: string) => {
@@ -91,10 +107,10 @@ export default function Board() {
     [store],
   );
 
-  const acceptVerdict = useCallback(
-    (title: string, quadrant: QuadrantId) => {
-      store.add(title, quadrant);
-      setTriageTask(null);
+  const handleAdd = useCallback(
+    (title: string, quadrant: QuadrantId, details: TaskDetails) => {
+      store.add(title, quadrant, details);
+      setAdding(false);
     },
     [store],
   );
@@ -111,18 +127,46 @@ export default function Board() {
           initial={reduce ? false : { opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: [0.22, 0.61, 0.36, 1] }}
-          className="lg:grid lg:grid-cols-[minmax(0,1.02fr)_minmax(360px,0.98fr)] lg:items-end lg:gap-12"
+          className="lg:grid lg:grid-cols-[minmax(0,1.02fr)_minmax(360px,0.98fr)] lg:items-center lg:gap-12"
         >
           <div className="px-1">
             <h1 className="max-w-[18ch] text-[34px] leading-[1.02] tracking-[-0.04em] sm:text-[46px] lg:text-[52px]">
               Decide what actually matters
             </h1>
             <p className="mt-3 max-w-[46ch] text-[15px] leading-[1.6] text-soft sm:text-[15.5px]">
-              Add a task and answer four quick questions. The board places it on urgency and importance, and you can
+              Add a task, answer up to three questions, and the board places it on urgency and importance. You can
               always overrule it.
             </p>
           </div>
-          <Composer onSubmitTriage={setTriageTask} onPlaceDirect={store.add} />
+
+          <div className="mt-6 sm:mt-7">
+            <button
+              type="button"
+              onClick={() => setAdding(true)}
+              className="glass glass-sheen group flex w-full items-center gap-2 rounded-glass p-1.5 pl-4 text-left transition-shadow duration-300 hover:shadow-lift"
+            >
+              <span className="min-w-0 flex-1 py-2.5 pl-1 text-[15.5px] text-faint">What needs doing?</span>
+              <span className="flex h-11 shrink-0 items-center gap-1.5 rounded-control bg-ink px-3.5 text-[13.5px] font-semibold text-canvas transition group-active:scale-[0.99]">
+                <PlusIcon className="h-4 w-4" />
+                Add a task
+              </span>
+            </button>
+
+            <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5 px-1 text-[12.5px] text-soft">
+              <span className="flex items-center gap-1.5">
+                <kbd className="rounded-[5px] border border-[color:var(--line)] px-1 text-[10.5px] font-semibold leading-[16px]">
+                  N
+                </kbd>
+                opens the dialog anywhere
+              </span>
+              <span className="h-3 w-px bg-[color:var(--line)]" aria-hidden="true" />
+              <span>Answers are only ever yes or no</span>
+              <span className="h-3 w-px bg-[color:var(--line)]" aria-hidden="true" />
+              <a href="#decides" className="underline decoration-[color:var(--line)] underline-offset-4 hover:text-ink">
+                How it decides
+              </a>
+            </div>
+          </div>
         </motion.section>
 
         <div className="mt-6 flex flex-col gap-3 border-t border-[color:var(--line)] pt-3.5 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
@@ -207,9 +251,7 @@ export default function Board() {
       </main>
 
       <AnimatePresence>
-        {triageTask && (
-          <TriageSheet task={triageTask} onClose={() => setTriageTask(null)} onAccept={acceptVerdict} />
-        )}
+        {adding && <AddTaskDialog onClose={() => setAdding(false)} onAdd={handleAdd} />}
       </AnimatePresence>
 
       <AnimatePresence>

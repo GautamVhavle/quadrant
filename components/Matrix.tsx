@@ -31,11 +31,11 @@ export function Matrix({ tasks, focus, onAdd, onToggle, onMove, onReorder, onRen
   return (
     <div className="relative mt-3 sm:mt-4">
       <div className="mb-2 flex items-center justify-between gap-3 px-0.5">
-        <p className="text-[12px] text-faint sm:text-[12.5px]">
+        <p className="text-[12px] text-soft sm:text-[12.5px]">
           <span className="hidden [@media(pointer:coarse)]:inline">Use a task menu to move it between areas.</span>
           <span className="[@media(pointer:coarse)]:hidden">Drag a task into another area to reclassify it.</span>
         </p>
-        <p className="flex items-center gap-1.5 text-[10.5px] font-semibold tracking-[0.16em] text-faint">
+        <p className="flex items-center gap-1.5 text-[10.5px] font-semibold tracking-[0.16em] text-soft">
           URGENCY
           <ArrowRightIcon className="h-3.5 w-3.5" />
         </p>
@@ -46,9 +46,9 @@ export function Matrix({ tasks, focus, onAdd, onToggle, onMove, onReorder, onRen
           className="absolute -left-6 top-0 hidden h-full flex-col items-center justify-center gap-2 lg:flex"
           aria-hidden="true"
         >
-          <ArrowUpIcon className="h-3.5 w-3.5 text-faint" />
+          <ArrowUpIcon className="h-3.5 w-3.5 text-soft" />
           <span
-            className="whitespace-nowrap text-[10.5px] font-semibold tracking-[0.16em] text-faint"
+            className="whitespace-nowrap text-[10.5px] font-semibold tracking-[0.16em] text-soft"
             style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
           >
             IMPORTANCE

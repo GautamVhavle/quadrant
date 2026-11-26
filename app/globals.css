@@ -35,6 +35,9 @@
   --q4-tint: rgba(95, 106, 114, 0.09);
 
   --focus: #1a6670;
+  --scrim: rgba(14, 22, 18, 0.26);
+  --sheet: rgba(252, 253, 252, 0.92);
+  --field-bg: rgba(255, 255, 255, 0.66);
   --shadow-glass: inset 0 1px 0 rgba(255, 255, 255, 0.65), 0 20px 50px -34px rgba(14, 22, 18, 0.5);
   --shadow-lift: 0 40px 80px -40px rgba(14, 22, 18, 0.55), 0 2px 8px -4px rgba(14, 22, 18, 0.2);
 }
@@ -66,6 +69,9 @@
   --q4-tint: rgba(154, 167, 174, 0.14);
 
   --focus: #58b6bf;
+  --scrim: rgba(0, 0, 0, 0.6);
+  --sheet: rgba(22, 28, 26, 0.94);
+  --field-bg: rgba(255, 255, 255, 0.07);
   --shadow-glass: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 24px 60px -34px rgba(0, 0, 0, 0.8);
   --shadow-lift: 0 50px 90px -40px rgba(0, 0, 0, 0.9), 0 2px 10px -4px rgba(0, 0, 0, 0.6);
 }
@@ -98,6 +104,9 @@
     --q4-tint: rgba(154, 167, 174, 0.14);
 
     --focus: #58b6bf;
+    --scrim: rgba(0, 0, 0, 0.6);
+    --sheet: rgba(22, 28, 26, 0.94);
+    --field-bg: rgba(255, 255, 255, 0.07);
     --shadow-glass: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 24px 60px -34px rgba(0, 0, 0, 0.8);
     --shadow-lift: 0 50px 90px -40px rgba(0, 0, 0, 0.9), 0 2px 10px -4px rgba(0, 0, 0, 0.6);
   }
@@ -230,6 +239,51 @@
   .thin-scroll::-webkit-scrollbar-thumb {
     background: var(--line);
     border-radius: 999px;
+  }
+
+  /* The dialog surface: thicker than the board glass, so it reads as a layer above. */
+  .glass-sheet {
+    background-color: var(--sheet);
+    -webkit-backdrop-filter: blur(40px) saturate(1.8);
+    backdrop-filter: blur(40px) saturate(1.8);
+    border: 1px solid var(--edge);
+    box-shadow:
+      var(--shadow-lift),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  }
+
+  .field {
+    border-radius: 9px;
+    border: 1px solid var(--line);
+    background-color: var(--field-bg);
+    transition: border-color 160ms ease, box-shadow 160ms ease;
+  }
+
+  .field:focus {
+    outline: none;
+    border-color: var(--focus);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus) 18%, transparent);
+  }
+
+  /* An answer card, the way a native sheet presents a binary choice. */
+  .answer {
+    display: block;
+    width: 100%;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    background-color: var(--field-bg);
+    padding: 0.7rem 0.85rem;
+    text-align: left;
+    transition: transform 160ms ease, border-color 160ms ease, background-color 160ms ease;
+  }
+
+  .answer:hover {
+    border-color: color-mix(in srgb, var(--ink) 26%, transparent);
+    background-color: color-mix(in srgb, var(--field-bg) 88%, var(--ink));
+  }
+
+  .answer:active {
+    transform: scale(0.988);
   }
 }
 

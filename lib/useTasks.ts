@@ -2,11 +2,12 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { loadTasks, saveTasks } from './storage';
 import { uid } from './utils';
 import * as logic from './taskLogic';
+import type { TaskDetails } from './taskLogic';
 import type { QuadrantId, Task } from './types';
 
 export interface TaskStore {
   tasks: Task[];
-  add: (title: string, quadrant: QuadrantId) => void;
+  add: (title: string, quadrant: QuadrantId, details?: TaskDetails) => void;
   toggle: (id: string) => void;
   move: (id: string, quadrant: QuadrantId) => void;
   reorder: (id: string, direction: -1 | 1) => void;
@@ -27,8 +28,8 @@ export function useTasks(): TaskStore {
     saveTasks(tasks);
   }, [tasks]);
 
-  const add = useCallback((title: string, quadrant: QuadrantId) => {
-    setTasks((prev) => logic.addTask(prev, title, quadrant, uid()));
+  const add = useCallback((title: string, quadrant: QuadrantId, details?: TaskDetails) => {
+    setTasks((prev) => logic.addTask(prev, title, quadrant, uid(), Date.now(), details));
   }, []);
 
   const toggle = useCallback((id: string) => {

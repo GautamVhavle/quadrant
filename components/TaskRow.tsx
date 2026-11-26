@@ -192,6 +192,17 @@ export function TaskRow({
           </button>
         )}
 
+        {task.notes && (
+          <p
+            className={cn(
+              'mt-0.5 line-clamp-2 text-[12px] leading-[1.45]',
+              task.done ? 'text-faint/70' : 'text-faint',
+            )}
+          >
+            {task.notes}
+          </p>
+        )}
+
         {task.due && !task.done && (
           <span
             className={cn(

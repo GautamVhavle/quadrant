@@ -9,6 +9,8 @@ export interface Task {
   completedAt?: number;
   /** ISO date (YYYY-MM-DD), optional. */
   due?: string;
+  /** A short note captured when the task was added. */
+  notes?: string;
 }
 
 export interface QuadrantMeta {
